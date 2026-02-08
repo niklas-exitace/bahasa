@@ -21,8 +21,8 @@ export default function PracticePage() {
   const [revealed, setRevealed] = useState(false);
   const [stats, setStats] = useState({ got: 0, missed: 0 });
 
-  const topics = [...new Set(sentences.map((s) => s.topic))];
-  const difficulties = [...new Set(sentences.map((s) => s.difficulty))];
+  const topics = Array.from(new Set(sentences.map((s) => s.topic)));
+  const difficulties = Array.from(new Set(sentences.map((s) => s.difficulty)));
 
   const rebuildDeck = useCallback(
     (diff: string, topic: string) => {
