@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { words, categories } from "@/data/vocabulary";
 import { sentences } from "@/data/sentences";
 import { readings } from "@/data/readings";
+import { lessons } from "@/data/lessons";
 import { getStats } from "@/lib/srs";
 
 const studyModes = [
@@ -117,6 +118,29 @@ export default function HomePage() {
             <p className="text-[11px] opacity-80 mt-0.5 leading-tight">
               {mode.description}
             </p>
+          </Link>
+        ))}
+      </div>
+
+      {/* Review Lessons */}
+      <h2 className="text-lg font-semibold text-gray-800 mb-3">Review Lessons</h2>
+      <div className="space-y-2 mb-8">
+        {lessons.map((lesson) => (
+          <Link
+            key={lesson.slug}
+            href="/lessons"
+            className="flex items-center gap-3 bg-white rounded-xl p-3 shadow-sm hover:shadow-md transition-all active:scale-[0.99]"
+          >
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+              {lesson.number}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-sm text-gray-900">{lesson.title}</p>
+              <p className="text-[11px] text-gray-500 truncate">{lesson.titleEn} — {lesson.description}</p>
+            </div>
+            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
           </Link>
         ))}
       </div>

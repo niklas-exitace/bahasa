@@ -24,6 +24,8 @@ export const categoryLabels: Record<string, string> = {
   verbs: "Verbs",
   nouns: "Nouns",
   food_drinks: "Food & Drinks",
+  colors: "Colors",
+  clothing: "Clothing",
   animals: "Animals",
   connectors_modifiers: "Connectors & Modifiers",
   possessives: "Possessives",
@@ -67,6 +69,8 @@ export const words: Word[] = [
   { id: "maaf", en: "sorry", notes: null, category: "greetings_phrases" },
   { id: "makasih", en: "thanks", notes: "informal for terima kasih", category: "greetings_phrases" },
   { id: "sama-sama", en: "you're welcome", notes: null, category: "greetings_phrases" },
+  { id: "permisi", en: "excuse me", notes: "used when entering/getting attention", category: "greetings_phrases" },
+  { id: "silahkan", en: "please (offering)", notes: "e.g. silahkan masuk = please come in", category: "greetings_phrases" },
 
   // ── Time of Day ──
   { id: "pagi", en: "morning", notes: null, category: "time_of_day" },
@@ -147,6 +151,10 @@ export const words: Word[] = [
   { id: "sedikit", en: "a little/few", notes: null, category: "adjectives" },
   { id: "pelan-pelan", en: "slowly", notes: null, category: "adjectives" },
   { id: "lokal", en: "local", notes: null, category: "adjectives" },
+  { id: "lumayan", en: "not bad/pretty (modifier)", notes: "lumayan mahal = pretty expensive", category: "adjectives" },
+  { id: "panjang", en: "long", notes: null, category: "adjectives" },
+  { id: "pendek", en: "short", notes: null, category: "adjectives" },
+  { id: "besar", en: "big", notes: null, category: "adjectives" },
 
   // ── Verbs ──
   { id: "tau", en: "know", notes: "informal for tahu", category: "verbs" },
@@ -174,6 +182,11 @@ export const words: Word[] = [
   { id: "tunggu", en: "wait", notes: null, category: "verbs" },
   { id: "minta", en: "ask for/request", notes: null, category: "verbs" },
   { id: "renang", en: "swim", notes: null, category: "verbs" },
+  { id: "bayar", en: "pay", notes: null, category: "verbs" },
+  { id: "lihat", en: "look/see", notes: "lihat-lihat = look around", category: "verbs" },
+  { id: "kurang", en: "reduce/less", notes: "bisa kurang? = can you reduce?", category: "verbs" },
+  { id: "isi", en: "fill/top up", notes: "isi pulsa = top up phone credit", category: "verbs" },
+  { id: "masuk", en: "enter/come in", notes: null, category: "verbs" },
 
   // ── Nouns ──
   { id: "nama", en: "name", notes: null, category: "nouns" },
@@ -193,6 +206,10 @@ export const words: Word[] = [
   { id: "pantai", en: "beach", notes: null, category: "nouns" },
   { id: "warung", en: "small restaurant/food stall", notes: null, category: "nouns" },
   { id: "porsi", en: "portion", notes: null, category: "nouns" },
+  { id: "toko", en: "shop/store", notes: null, category: "nouns" },
+  { id: "kasir", en: "cashier/register", notes: "bayar di kasir = pay at the register", category: "nouns" },
+  { id: "warna", en: "color", notes: null, category: "nouns" },
+  { id: "pulsa", en: "phone credit", notes: "beli pulsa = buy phone credit", category: "nouns" },
 
   // ── Food & Drinks ──
   { id: "nasi", en: "rice", notes: null, category: "food_drinks" },
@@ -215,6 +232,23 @@ export const words: Word[] = [
   { id: "pizza", en: "pizza", notes: null, category: "food_drinks" },
   { id: "alkohol", en: "alcohol", notes: null, category: "food_drinks" },
 
+  // ── Colors ──
+  { id: "putih", en: "white", notes: null, category: "colors" },
+  { id: "hitam", en: "black", notes: null, category: "colors" },
+  { id: "merah", en: "red", notes: null, category: "colors" },
+  { id: "hijau", en: "green", notes: null, category: "colors" },
+  { id: "biru", en: "blue", notes: null, category: "colors" },
+
+  // ── Clothing ──
+  { id: "pakaian", en: "clothes (general)", notes: null, category: "clothing" },
+  { id: "baju", en: "clothes/tops", notes: "general word for upper garments", category: "clothing" },
+  { id: "celana panjang", en: "long pants/trousers", notes: null, category: "clothing" },
+  { id: "celana pendek", en: "shorts", notes: null, category: "clothing" },
+  { id: "kemeja", en: "shirt/dress shirt", notes: null, category: "clothing" },
+  { id: "baju kaos", en: "t-shirt", notes: null, category: "clothing" },
+  { id: "kaca mata", en: "glasses/sunglasses", notes: null, category: "clothing" },
+  { id: "jaket", en: "jacket", notes: null, category: "clothing" },
+
   // ── Animals ──
   { id: "anjing", en: "dog", notes: "also used as swear word", category: "animals" },
   { id: "babi", en: "pig", notes: null, category: "animals" },
@@ -233,6 +267,9 @@ export const words: Word[] = [
   { id: "habis", en: "sold out/finished", notes: null, category: "connectors_modifiers" },
   { id: "semua", en: "all/everything", notes: null, category: "connectors_modifiers" },
   { id: "total", en: "total", notes: null, category: "connectors_modifiers" },
+  { id: "terlalu", en: "too (excessive)", notes: "terlalu mahal = too expensive", category: "connectors_modifiers" },
+  { id: "enggak", en: "no/not", notes: "informal for tidak", category: "connectors_modifiers" },
+  { id: "saja", en: "just/only", notes: "itu saja = just that", category: "connectors_modifiers" },
 
   // ── Possessives ──
   { id: "punya saya", en: "mine", notes: null, category: "possessives" },
@@ -248,6 +285,11 @@ export const phrases: Phrase[] = [
   { id: "Saya mau beli", en: "I want to buy", context: "shopping" },
   { id: "Ada uang pas?", en: "Do you have exact change?", context: "shopping" },
   { id: "Ini uangnya", en: "Here's the money", context: "shopping" },
+  { id: "Bisa kurang?", en: "Can you reduce the price?", context: "shopping" },
+  { id: "Yang ini harga pas", en: "This one is fixed price", context: "shopping" },
+  { id: "Ada lagi?", en: "Anything else?", context: "shopping" },
+  { id: "Itu saja", en: "Just that / That's all", context: "shopping" },
+  { id: "Silahkan bayar di kasir", en: "Please pay at the register", context: "shopping" },
   // Restaurant
   { id: "Mau pesan apa?", en: "What would you like to order?", context: "restaurant" },
   { id: "Saya mau pesan...", en: "I would like to order...", context: "restaurant" },
