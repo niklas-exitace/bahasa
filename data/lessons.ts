@@ -19,6 +19,9 @@ export type Lesson = {
   grammarTips: Array<{ tip: string; detail: string }>;
 };
 
+// Special slugs that have their own custom quiz page (not the generic funnel)
+export const customLessonSlugs = ["angka"];
+
 export const lessons: Lesson[] = [
   {
     number: 1,
@@ -136,6 +139,23 @@ export const lessons: Lesson[] = [
       { tip: "Terlalu vs lumayan", detail: "terlalu = too (negative), lumayan = pretty/not bad (softer)" },
       { tip: "Enggak = tidak (informal)", detail: "Enggak ada = there isn't any. Enggak apa-apa = it's okay" },
       { tip: "Colors after warna", detail: "warna hitam = black color. kemeja warna hitam = black shirt" },
+    ],
+  },
+  {
+    number: 4,
+    slug: "angka",
+    title: "Angka & Harga",
+    titleEn: "Numbers & Prices",
+    description: "Deep dive into numbers, composing big amounts, and using prices in shopping dialogues",
+    vocabCategories: ["numbers"],
+    vocabIds: ["harga", "mahal", "murah", "uang", "total", "berapa"],
+    sentenceTopics: ["shopping"],
+    readingSlugs: ["di-pasar", "di-toko-baju"],
+    expressions: [],
+    grammarTips: [
+      { tip: "\"Se-\" prefix = one", detail: "seratus (100), seribu (1000), sebelas (11)" },
+      { tip: "Read left to right", detail: "298.000 = dua ratus sembilan puluh delapan ribu" },
+      { tip: "Prices drop \"ribu\"", detail: "Locals often say \"dua ratus\" for Rp 200.000" },
     ],
   },
 ];
