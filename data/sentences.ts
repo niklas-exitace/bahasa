@@ -78,6 +78,17 @@ export const sentences: Sentence[] = [
   { id: "Total berapa?", en: "What is the total?", difficulty: "elementary", topic: "shopping" },
   { id: "Ini uangnya.", en: "Here is the money.", difficulty: "elementary", topic: "shopping" },
   { id: "Saya mau beli tiga kilo pisang.", en: "I want to buy three kilos of bananas.", difficulty: "elementary", topic: "shopping" },
+  { id: "Permisi bu, jual air?", en: "Excuse me, do you sell water?", difficulty: "elementary", topic: "shopping" },
+  { id: "Tunggu sebentar, saya mau lihat-lihat.", en: "Wait a moment, I want to look around.", difficulty: "elementary", topic: "shopping" },
+  { id: "Bisa kurang?", en: "Can you reduce the price?", difficulty: "elementary", topic: "shopping" },
+  { id: "Yang ini harga pas.", en: "This one is fixed price.", difficulty: "elementary", topic: "shopping" },
+  { id: "Yang itu terlalu mahal.", en: "That one is too expensive.", difficulty: "elementary", topic: "shopping", notes: "terlalu = too (excessive)" },
+  { id: "Yang besar lumayan mahal.", en: "The big one is pretty expensive.", difficulty: "elementary", topic: "shopping", notes: "lumayan = not bad / pretty" },
+  { id: "Silahkan masuk.", en: "Please come in.", difficulty: "elementary", topic: "shopping" },
+  { id: "Saya mau beli baju untuk kerja.", en: "I want to buy clothes for work.", difficulty: "elementary", topic: "shopping" },
+  { id: "Ada kemeja warna hitam?", en: "Do you have a black dress shirt?", difficulty: "elementary", topic: "shopping" },
+  { id: "Silahkan bayar di kasir.", en: "Please pay at the register.", difficulty: "elementary", topic: "shopping" },
+  { id: "Saya mau beli pulsa.", en: "I want to buy phone credit.", difficulty: "elementary", topic: "shopping" },
 
   // ── Directions & Places (elementary) ──
   { id: "Saya tinggal di Bali.", en: "I live in Bali.", difficulty: "elementary", topic: "directions" },
