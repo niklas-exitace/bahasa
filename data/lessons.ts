@@ -17,10 +17,15 @@ export type Lesson = {
   readingSlugs: string[];
   expressions: LessonExpression[];
   grammarTips: Array<{ tip: string; detail: string }>;
+  vocabQuizCount?: number;
+  sentenceQuizCount?: number;
 };
 
 // Special slugs that have their own custom quiz page (not the generic funnel)
 export const customLessonSlugs = ["angka"];
+
+// Comprehensive review lessons get a distinct style on the lessons page
+export const reviewLessonSlugs = ["review-all"];
 
 export const lessons: Lesson[] = [
   {
@@ -157,5 +162,39 @@ export const lessons: Lesson[] = [
       { tip: "Read left to right", detail: "298.000 = dua ratus sembilan puluh delapan ribu" },
       { tip: "Prices drop \"ribu\"", detail: "Locals often say \"dua ratus\" for Rp 200.000" },
     ],
+  },
+  {
+    number: 0,
+    slug: "review-all",
+    title: "Review Semua",
+    titleEn: "Full Review",
+    description: "Everything from Bagian 1–3: greetings, food, shopping, colors, clothing, numbers, and all dialogues",
+    vocabCategories: [
+      "pronouns", "people_titles", "greetings_phrases", "time_of_day", "time_words",
+      "question_words", "prepositions", "numbers", "adjectives", "verbs", "nouns",
+      "food_drinks", "colors", "clothing", "animals", "connectors_modifiers", "possessives",
+    ],
+    vocabIds: [],
+    sentenceTopics: [
+      "basics", "greetings", "food", "shopping", "directions",
+      "daily", "descriptions", "time", "conversation",
+    ],
+    readingSlugs: [
+      "di-restoran", "rumah-di-pererenan", "sanur-beach", "toni-pintuar",
+      "di-pasar", "di-toko-baju", "di-counter-hp",
+    ],
+    expressions: [],
+    grammarTips: [
+      { tip: "No verb conjugation", detail: "Indonesian verbs don't change form — saya makan, dia makan, mereka makan" },
+      { tip: "Location words", detail: "di (at/in), ke (to), dari (from)" },
+      { tip: "\"Sekali\" = very", detail: "Comes AFTER adjective: enak sekali = very delicious" },
+      { tip: "Sudah / Belum", detail: "already / not yet — Sudah makan? Belum." },
+      { tip: "Yang = which/the one", detail: "Yang ini = this one, Yang itu = that one, Yang merah = the red one" },
+      { tip: "Terlalu vs lumayan", detail: "terlalu = too (negative), lumayan = pretty/not bad (softer)" },
+      { tip: "Colors after warna", detail: "warna hitam = black color. kemeja warna hitam = black shirt" },
+      { tip: "\"Se-\" prefix = one", detail: "seratus (100), seribu (1000), sebelas (11)" },
+    ],
+    vocabQuizCount: 999,
+    sentenceQuizCount: 999,
   },
 ];

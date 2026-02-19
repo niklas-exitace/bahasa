@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { lessons, customLessonSlugs } from "@/data/lessons";
+import { lessons, customLessonSlugs, reviewLessonSlugs } from "@/data/lessons";
 import { words } from "@/data/vocabulary";
 import { sentences } from "@/data/sentences";
 import { readings } from "@/data/readings";
@@ -32,11 +32,13 @@ export default function LessonsPage() {
               <div className="p-4">
                 <div className="flex items-center gap-3 mb-3">
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br flex items-center justify-center text-white font-bold text-lg shrink-0 ${
-                    customLessonSlugs.includes(lesson.slug)
-                      ? "from-warm-400 to-warm-500"
-                      : "from-brand-500 to-brand-600"
+                    reviewLessonSlugs.includes(lesson.slug)
+                      ? "from-violet-500 to-purple-600"
+                      : customLessonSlugs.includes(lesson.slug)
+                        ? "from-warm-400 to-warm-500"
+                        : "from-brand-500 to-brand-600"
                   }`}>
-                    {customLessonSlugs.includes(lesson.slug) ? "#" : lesson.number}
+                    {reviewLessonSlugs.includes(lesson.slug) ? "★" : customLessonSlugs.includes(lesson.slug) ? "#" : lesson.number}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-gray-900">{lesson.title}</h3>
@@ -62,12 +64,14 @@ export default function LessonsPage() {
                 </div>
               </div>
               <div className={`bg-gradient-to-r px-4 py-2.5 ${
-                customLessonSlugs.includes(lesson.slug)
-                  ? "from-warm-400 to-warm-500"
-                  : "from-brand-500 to-brand-600"
+                reviewLessonSlugs.includes(lesson.slug)
+                  ? "from-violet-500 to-purple-600"
+                  : customLessonSlugs.includes(lesson.slug)
+                    ? "from-warm-400 to-warm-500"
+                    : "from-brand-500 to-brand-600"
               }`}>
                 <p className="text-white text-sm font-semibold text-center">
-                  {customLessonSlugs.includes(lesson.slug) ? "Start Numbers Quiz" : "Start Review"}
+                  {reviewLessonSlugs.includes(lesson.slug) ? "Start Full Review" : customLessonSlugs.includes(lesson.slug) ? "Start Numbers Quiz" : "Start Review"}
                 </p>
               </div>
             </Link>
