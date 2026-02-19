@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -419,8 +419,6 @@ export default function LessonReviewPage() {
   const lesson = lessons.find((l) => l.slug === slug);
 
   const [stage, setStage] = useState<Stage>("intro");
-  const [vocabIdx, setVocabIdx] = useState(0);
-  const [sentenceIdx, setSentenceIdx] = useState(0);
   const [vocabScore, setVocabScore] = useState(0);
   const [sentenceScore, setSentenceScore] = useState(0);
   const [readingScore, setReadingScore] = useState(0);
@@ -440,37 +438,64 @@ export default function LessonReviewPage() {
   );
 
   const vocabQuestions = useMemo(
-    () => buildVocabQuestions(lessonVocab, words, Math.min(10, lessonVocab.length)),
-    [lessonVocab]
+    () => buildVocabQuestions(lessonVocab, words, Math.min(lesson?.vocabQuizCount ?? 10, lessonVocab.length)),
+    [lessonVocab, lesson]
   );
   const sentenceQuestions = useMemo(
-    () => buildSentenceQuestions(lessonSentences, sentences, Math.min(6, lessonSentences.length)),
-    [lessonSentences]
+    () => buildSentenceQuestions(lessonSentences, sentences, Math.min(lesson?.sentenceQuizCount ?? 6, lessonSentences.length)),
+    [lessonSentences, lesson]
   );
 
+  // Queue-based quiz: wrong answers get re-queued until correct
+  const [vocabQueue, setVocabQueue] = useState<QuizQuestion[]>(vocabQuestions);
+  const [vocabKey, setVocabKey] = useState(0);
+  const [sentenceQueue, setSentenceQueue] = useState<QuizQuestion[]>(sentenceQuestions);
+  const [sentenceKey, setSentenceKey] = useState(0);
+  const vocabSeenRef = useRef(new Set<string>());
+  const sentenceSeenRef = useRef(new Set<string>());
+
+  const vocabTotal = vocabQuestions.length;
+  const sentenceTotal = sentenceQuestions.length;
   const hasReadings = lessonReadings.length > 0;
 
   const handleVocabAnswer = useCallback((correct: boolean) => {
-    if (correct) setVocabScore((s) => s + 1);
-    if (vocabIdx + 1 < vocabQuestions.length) {
-      setVocabIdx((i) => i + 1);
-    } else {
-      setStage("stage-transition");
-    }
-  }, [vocabIdx, vocabQuestions.length]);
+    const current = vocabQueue[0];
+    const isFirst = !vocabSeenRef.current.has(current.prompt);
+    vocabSeenRef.current.add(current.prompt);
+    if (isFirst && correct) setVocabScore((s) => s + 1);
+
+    setVocabKey((k) => k + 1);
+    setVocabQueue((q) => {
+      const [, ...rest] = q;
+      return correct ? rest : [...rest, q[0]];
+    });
+  }, [vocabQueue]);
 
   const handleSentenceAnswer = useCallback((correct: boolean) => {
-    if (correct) setSentenceScore((s) => s + 1);
-    if (sentenceIdx + 1 < sentenceQuestions.length) {
-      setSentenceIdx((i) => i + 1);
-    } else {
-      if (hasReadings) {
-        setStage("reading");
-      } else {
-        setStage("complete");
-      }
+    const current = sentenceQueue[0];
+    const isFirst = !sentenceSeenRef.current.has(current.prompt);
+    sentenceSeenRef.current.add(current.prompt);
+    if (isFirst && correct) setSentenceScore((s) => s + 1);
+
+    setSentenceKey((k) => k + 1);
+    setSentenceQueue((q) => {
+      const [, ...rest] = q;
+      return correct ? rest : [...rest, q[0]];
+    });
+  }, [sentenceQueue]);
+
+  // Transition when queues are fully cleared
+  useEffect(() => {
+    if (stage === "vocab" && vocabQueue.length === 0 && vocabKey > 0) {
+      setStage("stage-transition");
     }
-  }, [sentenceIdx, sentenceQuestions.length, hasReadings]);
+  }, [stage, vocabQueue.length, vocabKey]);
+
+  useEffect(() => {
+    if (stage === "sentences" && sentenceQueue.length === 0 && sentenceKey > 0) {
+      setStage(hasReadings ? "reading" : "complete");
+    }
+  }, [stage, sentenceQueue.length, sentenceKey, hasReadings]);
 
   const handleReadingComplete = useCallback((score: number, total: number) => {
     setReadingScore(score);
@@ -488,7 +513,7 @@ export default function LessonReviewPage() {
   }
 
   const totalScore = vocabScore + sentenceScore + readingScore;
-  const totalQuestions = vocabQuestions.length + sentenceQuestions.length + readingTotal;
+  const totalQuestions = vocabTotal + sentenceTotal + readingTotal;
 
   return (
     <div className="pt-6 pb-4">
@@ -520,11 +545,11 @@ export default function LessonReviewPage() {
 
             <div className="flex justify-center gap-3 mb-8">
               <div className="bg-white rounded-xl px-4 py-2.5 shadow-sm text-center">
-                <p className="text-lg font-bold text-brand-600">{vocabQuestions.length}</p>
+                <p className="text-lg font-bold text-brand-600">{vocabTotal}</p>
                 <p className="text-[10px] text-gray-500">Vocab</p>
               </div>
               <div className="bg-white rounded-xl px-4 py-2.5 shadow-sm text-center">
-                <p className="text-lg font-bold text-violet-500">{sentenceQuestions.length}</p>
+                <p className="text-lg font-bold text-violet-500">{sentenceTotal}</p>
                 <p className="text-[10px] text-gray-500">Sentences</p>
               </div>
               {hasReadings && (
@@ -562,13 +587,18 @@ export default function LessonReviewPage() {
         )}
 
         {/* ─── VOCAB QUIZ ─── */}
-        {stage === "vocab" && vocabQuestions[vocabIdx] && (
-          <motion.div key={`vocab-${vocabIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <ProgressBar current={vocabIdx} total={vocabQuestions.length} stage="Vocabulary" />
+        {stage === "vocab" && vocabQueue[0] && (
+          <motion.div key={`vocab-${vocabKey}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ProgressBar current={vocabScore} total={vocabTotal} stage="Vocabulary" />
+            {vocabQueue.length > vocabTotal - vocabScore && (
+              <p className="text-xs text-amber-600 font-medium text-center -mt-4 mb-4">
+                {vocabQueue.length - (vocabTotal - vocabScore)} to retry
+              </p>
+            )}
             <QuizCard
-              question={vocabQuestions[vocabIdx]}
+              question={vocabQueue[0]}
               onAnswer={handleVocabAnswer}
-              questionNumber={vocabIdx}
+              questionNumber={vocabKey}
             />
           </motion.div>
         )}
@@ -580,7 +610,7 @@ export default function LessonReviewPage() {
               title="Vocabulary done!"
               subtitle="Nice work on the words"
               score={vocabScore}
-              total={vocabQuestions.length}
+              total={vocabTotal}
               nextLabel="Next: Sentences"
               onNext={() => setStage("sentences")}
               color="from-brand-400 to-brand-500"
@@ -589,13 +619,18 @@ export default function LessonReviewPage() {
         )}
 
         {/* ─── SENTENCE QUIZ ─── */}
-        {stage === "sentences" && sentenceQuestions[sentenceIdx] && (
-          <motion.div key={`sent-${sentenceIdx}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <ProgressBar current={sentenceIdx} total={sentenceQuestions.length} stage="Sentences" />
+        {stage === "sentences" && sentenceQueue[0] && (
+          <motion.div key={`sent-${sentenceKey}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ProgressBar current={sentenceScore} total={sentenceTotal} stage="Sentences" />
+            {sentenceQueue.length > sentenceTotal - sentenceScore && (
+              <p className="text-xs text-amber-600 font-medium text-center -mt-4 mb-4">
+                {sentenceQueue.length - (sentenceTotal - sentenceScore)} to retry
+              </p>
+            )}
             <QuizCard
-              question={sentenceQuestions[sentenceIdx]}
+              question={sentenceQueue[0]}
               onAnswer={handleSentenceAnswer}
-              questionNumber={sentenceIdx}
+              questionNumber={sentenceKey}
             />
           </motion.div>
         )}
@@ -628,11 +663,11 @@ export default function LessonReviewPage() {
 
             <div className="grid grid-cols-3 gap-2 mb-8 max-w-xs mx-auto">
               <div className="bg-white rounded-xl p-3 shadow-sm text-center">
-                <p className="text-lg font-bold text-brand-600">{vocabScore}/{vocabQuestions.length}</p>
+                <p className="text-lg font-bold text-brand-600">{vocabScore}/{vocabTotal}</p>
                 <p className="text-[10px] text-gray-500">Vocab</p>
               </div>
               <div className="bg-white rounded-xl p-3 shadow-sm text-center">
-                <p className="text-lg font-bold text-violet-500">{sentenceScore}/{sentenceQuestions.length}</p>
+                <p className="text-lg font-bold text-violet-500">{sentenceScore}/{sentenceTotal}</p>
                 <p className="text-[10px] text-gray-500">Sentences</p>
               </div>
               <div className="bg-white rounded-xl p-3 shadow-sm text-center">
